@@ -258,6 +258,9 @@ public class SecurityTokenHelper {
         String response = "", status = "";
         boolean shouldPad = true;
 
+        // Debug for https://github.com/open-keychain/open-keychain/issues/2049#issuecomment-309359786
+        Log.d(Constants.TAG, "DEBUG #2049 ENCRYPTED SESSION KEY : " + Hex.toHexString(encryptedSessionKey, 0, encryptedSessionKey.length));
+
         // Transmit
         while (offset < encryptedSessionKey.length) {
             boolean isLastCommand = MAX_APDU_DATAFIELD_SIZE >= encryptedSessionKey.length - offset;
@@ -269,6 +272,8 @@ public class SecurityTokenHelper {
                     + (shouldPad ? "00": "")
                     + Hex.toHexString(encryptedSessionKey, offset, len - (shouldPad ? 1 : 0)) + "0000";
             shouldPad = false;
+            // Debug for https://github.com/open-keychain/open-keychain/issues/2049#issuecomment-309359786
+            Log.d(Constants.TAG, "DEBUG #2049 COMMAND : " + command.toString());
             response = communicate(command);
             status = response.substring(response.length() - 4);
 
